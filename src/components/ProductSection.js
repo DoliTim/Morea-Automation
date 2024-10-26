@@ -85,7 +85,8 @@ function ProductSection() {
             <p className="text-gray-600">Elegant appearance that complements any setting.</p>
           </div>
         </div>
-      </div>
+      </div> 
+      
     </section>
   );
 }

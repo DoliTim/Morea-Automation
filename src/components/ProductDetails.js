@@ -1,14 +1,7 @@
-// src/components/ProductDetails.js
 import React, { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import CheckoutForm from './CheckoutForm';
-
-// Initialize Stripe
-const stripePromise = loadStripe('your_publishable_key');
 
 function ProductDetails() {
   const [selectedVariant, setSelectedVariant] = useState(0);
-  const [showCheckout, setShowCheckout] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
   const variants = [
@@ -21,7 +14,8 @@ function ProductDetails() {
       color: "Metallic Black",
       gradient: "bg-gradient-to-r from-gray-600 to-gray-800",
       sku: "MBH-001",
-      stock: 50
+      stock: 50,
+      stripeLink: "https://buy.stripe.com/eVabJC6jNgO4bQIfYZ"
     },
     {
       id: "matte-black",
@@ -32,7 +26,8 @@ function ProductDetails() {
       color: "Matte Black",
       gradient: "bg-gray-900",
       sku: "MBH-002",
-      stock: 50
+      stock: 50,
+      stripeLink: "https://buy.stripe.com/eVabJC6jNgO4bQIfYZ"
     },
     {
       id: "rose-gold",
@@ -43,7 +38,8 @@ function ProductDetails() {
       color: "Rose Gold",
       gradient: "bg-gradient-to-r from-rose-300 to-rose-400",
       sku: "MBH-003",
-      stock: 50
+      stock: 50,
+      stripeLink: "https://buy.stripe.com/eVabJC6jNgO4bQIfYZ"
     }
   ];
 
@@ -59,40 +55,9 @@ function ProductDetails() {
   const isEligibleForFreeShipping = totalPrice >= 30;
 
   const handleCheckout = () => {
-    const orderDetails = {
-      variant: variants[selectedVariant],
-      quantity: quantity,
-      totalPrice: totalPrice,
-      timestamp: new Date().toISOString()
-    };
-    
-    // Store order details in localStorage for checkout process
-    localStorage.setItem('currentOrder', JSON.stringify(orderDetails));
-    setShowCheckout(true);
+    // Redirect to Stripe checkout page
+    window.location.href = variants[selectedVariant].stripeLink;
   };
-
-  if (showCheckout) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto">
-            <div className="bg-white shadow sm:rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
-                <CheckoutForm 
-                  orderDetails={{
-                    variant: variants[selectedVariant],
-                    quantity: quantity,
-                    totalPrice: totalPrice
-                  }}
-                  onCancel={() => setShowCheckout(false)}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <section className="py-20 bg-white" id="product-details">
@@ -207,7 +172,7 @@ function ProductDetails() {
                 </div>
               </div>
 
-              {/* Add to Cart Button */}
+              {/* Checkout Button */}
               <button 
                 onClick={handleCheckout}
                 className="w-full bg-gray-900 text-white py-3 px-6 rounded-full hover:bg-gray-800 transition-colors duration-300 mb-4"
